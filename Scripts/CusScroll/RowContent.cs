@@ -9,7 +9,46 @@ public class RowContent : MonoBehaviour
     private List<string> rowLoad;
     private float largestWidth;
     // Start is called before the first frame update
+    private Vector2 oldSize;
+    private Vector2 newSize;
 
+
+    [SerializeField]
+    private bool checkDone;
+    private void ConSizTest()
+    {
+        //set method's oldSize value on start.
+        ///so this was a smaller
+        ///method to begin with so oldSize, would be the agreed upon balanced optimal size inside all obj groupings.
+        ///There are four of them
+        ///row widths to themselves;
+        ///column heights to themselves;
+        ///row obj height to its matching grid row objects;
+        ///column obj height to its matching grid column objects
+
+        //set this method on update to start, and make sure that checkdone is set to false to start method when ready.
+        newSize = this.GetComponent<RectTransform>().sizeDelta;
+        if (!checkDone)
+        {
+
+            if ((newSize == oldSize))
+            {
+                //enter method for changing size to preferred, via content fitter
+            }
+
+            if (!(newSize == oldSize))
+            {
+                //enter method to record all preferred sizes from content size fitter
+
+                //enter method to disable content fitter, AND size all obj to balanced optimal size (handled by record of content size fitter)
+
+                //set checkdone to true to stop method from running completely
+                checkDone = true;
+            }
+        }
+
+
+    }
     public void ShoutDims()
     {
         for(int g = 0; g < this.transform.childCount; g++)
