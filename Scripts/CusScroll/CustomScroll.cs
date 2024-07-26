@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
 public class CustomScroll : MonoBehaviour
 {
+    [SerializeField]
+    private Canvas canvas;
+
     [SerializeField]
     private ColumnContent colContent;
 
@@ -17,63 +21,78 @@ public class CustomScroll : MonoBehaviour
     [SerializeField]
     private OptionsContent optContent;
 
-
-    private List<string> foreignListRow;
-    private List<string> foreignListColumn;
-    private List<List<string>> foreignListGrid;
-
     [SerializeField]
     [Tooltip("Turn on to setup options in right corner of listed objects")]
     private bool optionsOn;
 
 
-    private void Start()
+    private void Update()
     {
+        ExecutePreferred(AllObjsPrefd(), this.gameObject.GetComponent<RectTransform>().rect.height / 10);
 
-        //optContent.TurnOptions(optionsOn, colContent.ReturnHeight());
-        roContent.PreferFitObjects();
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            SetToPrefer();
+        }
 
+        Debug.Log(colContent.GetComponent<RectTransform>().rect.height / this.gameObject.GetComponent<RectTransform>().rect.height);
     }
 
-    
+    private void ExecutePreferred(bool allObjsPrefd, float tenPercentHeight)
+    {
+        if(allObjsPrefd)
+        {
+            //prepare widths
+            float roOffset = roContent.AdjustX();
+            float colOffset = tenPercentHeight;
+            optContent.TurnOptions(optionsOn, colOffset);
+            colContent.AdjustX(OptimizedWidths(), roOffset, colOffset);
+            griContent.AdjustX(OptimizedWidths(), roOffset, colOffset);
+            
+            //prepare heights
+
+        }
+    }
 
 
     /// <summary>
-    /// how do coroutines work? they might be able to replace update needs. the way i think it works is that it can be placed in a method
-    /// and setup to run for a specified amount of time. the coroutine can be run by an event trigger attached to the same object as this script
+    /// Trigger this to set in motion correct autosizing of scroll Object.
     /// </summary>
-    private void Update()
+    private void SetToPrefer()
     {
-        //roContent.SetWidth();
-        //colContent.CheckColBoundary(roContent.ReturnWidth(), optContent.ReturnWidth());
-        //griContent.CheckGridBoudaries(roContent.ReturnWidth(), optContent.ReturnWidth());
-        //griContent.GridSetGroupingObjs(roContent.RowObjHeights(),colContent.colObjWidths());
+        roContent.SetToPrefer();
+        colContent.SetToPrefer();
+        griContent.SetToPrefer();
+    }
+
+    private bool AllObjsPrefd()
+    {
+        bool allObjPrefd = false;
+        if(roContent.Prefd() && colContent.Prefd() && griContent.Prefd()) allObjPrefd = true;
+        return allObjPrefd;
+    }
+
+
+    private List<float> OptimizedWidths()
+    {
+        List<float> optFloats = colContent.ReturnColumnX();
+
+        for(int a = 0; a < optFloats.Count; a++)
+        {
+            if (optFloats[a] < griContent.CapGridX(a))
+            {
+                optFloats[a] = griContent.CapGridX(a);
+
+            }
+
+            if (optFloats[a] > 250) optFloats[a] = 250;
+
+        }
+
+        return optFloats;
 
     }
 
 
 
-    // Start is called before the first frame update
-    void OldLines()
-    {
-        /*
-        foreignListRow = new List<string> { "string", "gun", "row" };
-        roContent.CallRow(foreignListRow);
-
-        foreignListColumn = new List<string> { "twenties is cool", "forward march says the frog", "senshi sensei" };
-        colContent.CallColumn(foreignListColumn, roContent.OptimalRowWidth(), optContent.OptimalOptionsWidth(true));
-
-        foreignListGrid = new List<List<string>> { new List<string>{ "deal", "renumeration", "psychodelic" }, new List<string> { "apollyean", "nachos", "ghiardelli"}, new List<string>{"deep pockets", "deep galactic", "dark orbit"} };
-        griContent.CallGrid(foreignListGrid, roContent.OptimalRowWidth(), optContent.OptimalOptionsWidth(true));
-
-        optContent.CallOptions(true, foreignListRow.Count);
-        */
-
-    }
-
-
-    public void AdjustHorizontal()
-    {
-        Invoke("JumpWidthsColumnGrid", 0.1f);
-    }
 }

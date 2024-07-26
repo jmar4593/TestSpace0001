@@ -36,30 +36,16 @@ public class ObjectShout : MonoBehaviour
         newSize = this.GetComponent<RectTransform>().sizeDelta;
         if(!checkDone)
         {
-
             if ((newSize == oldSize))
             {
-                Debug.Log($"Before preferring size: {ShoutObjSize()}");
-
-                //repeat until n and o are different
-
                 PreferSizeObj();
             }
-
             if (!(newSize == oldSize))
             {
-                Debug.Log($"After preferring size call: {ShoutObjSize()}");
-
-                //repeat until n and o are different
                 UnconstrainedSizeObj();
-
-                //call once set bool to true so all method does not run
-                Debug.Log($"Collapsing object shows that: {ShoutObjSize()}");
                 checkDone = true;
             }
         }
-
-
     }
 
     private string ShoutObjSize()

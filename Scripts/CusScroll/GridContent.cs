@@ -3,100 +3,54 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using Scroll;
+using UnityEngine.UI;
 
-public class GridContent : MonoBehaviour
+public class GridContent : Scroll01
 {
-    private List<List<string>> gridLoad;
-
-    private Vector2 oldGridBoundary;
-    private Vector2 newGridBoundary;
-
-    
-
-    /// <summary>
-    /// this method should originally sit on the grid object
-    /// </summary>
-    /// <param name="rowBoundary"></param>
-    /// <param name="optionOffset"></param>
-    /// 
-    public void Awake()
+    public bool Prefd()
     {
-        oldGridBoundary = new Vector2(0f, 0f);
+        bool prefd = true;
+        for(int a = 0; a < this.transform.childCount; a++)
+        {
+            prefd = ObjsPrefd(this.transform.GetChild(a).gameObject);
+        }
+
+        return prefd;
     }
 
-    //need to start with row first because we need to see how many objects are active.
-    public void GridSetGroupingObjs(List<float> rowObjHeights, List<float> colObjWidths)
+    public void SetToPrefer()
     {
-        //set groupings first
-        for (int b = 0; b < rowObjHeights.Count; b++)
+        for(int a = 0; a < this.transform.childCount; a++)
         {
-            this.transform.GetChild(b).gameObject.SetActive(true);
+            PreferDims(this.transform.GetChild(a).gameObject);
         }
-        //then set grouping objs. active and sizes
-        for (int a = 0; a < this.transform.childCount; a++)
+
+    }
+
+    public float CapGridX(int colX)
+    {
+        float longestWidthGridX = new float();
+        for(int a = 0; a < this.transform.childCount; a++)
         {
-            if(this.transform.GetChild(a).gameObject.activeSelf)
+            if (longestWidthGridX < this.transform.GetChild(a).GetChild(colX).GetComponent<RectTransform>().sizeDelta.x)
+                longestWidthGridX = this.transform.GetChild(a).GetChild(colX).GetComponent<RectTransform>().sizeDelta.x;
+        }
+        return longestWidthGridX;
+    }
+
+    public void AdjustX(List<float> optmzedWidths, float rowOffset, float optionsOffset)
+    {
+        for(int a = 0; a < this.transform.childCount; a++)
+        {
+            for(int b = 0; b < this.transform.GetChild(a).childCount; b++)
             {
-                for(int b = 0; b < colObjWidths.Count; b++)
-                {
-                    this.transform.GetChild(a).GetChild(b).gameObject.SetActive(true);
-                    this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(colObjWidths[b], rowObjHeights[b]);
-                }
+                this.transform.GetChild(a).GetChild(b).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(optmzedWidths[b], this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta.y);
             }
         }
-    }
 
+        OffsetRowOptionBorders(this.gameObject, rowOffset, optionsOffset);
 
-
-    public void CheckGridBoudaries(float rowOffset, float optionOffset)
-    {
-        this.newGridBoundary[0] = rowOffset;
-        this.newGridBoundary[1] = optionOffset;
-
-        if (!(newGridBoundary == oldGridBoundary))
-        {
-            oldGridBoundary = newGridBoundary;
-            //change grid offsets
-            this.transform.parent.parent.GetComponent<RectTransform>().offsetMin = new Vector2(rowOffset, 0f);
-            this.transform.parent.parent.GetComponent<RectTransform>().offsetMax = new Vector2(-optionOffset, 0f);
-
-        }
-    }
-
-
-
-    public void CallGrid(List<List<string>> insertGridLoad, float offsetFromRowWidth)
-    {
-        this.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(offsetFromRowWidth, 0f);
-
-        this.gridLoad = insertGridLoad;
-
-
-        for (int a = 0; a < insertGridLoad.Count; a++)
-        {
-            for (int b = 0; b < insertGridLoad[a].Count; b++)
-            {
-                this.transform.GetChild(a).GetChild(b).gameObject.SetActive(true);
-                this.transform.GetChild(a).GetChild(b).GetComponent<TextMeshProUGUI>().text = insertGridLoad[a][b];
-            }
-        }
-    }
-    public void CallGrid(List<List<string>> insertGridLoad, float offsetFromRowWidth, float offsetFromOptionsWidth)
-    {
-
-        this.transform.parent.parent.GetComponent<RectTransform>().offsetMin = new Vector2(offsetFromRowWidth, 0f);
-        this.transform.parent.parent.GetComponent<RectTransform>().offsetMax = new Vector2(-offsetFromOptionsWidth, 0f);
-        
-        this.gridLoad = insertGridLoad;
-
-
-        for(int a = 0; a < insertGridLoad.Count; a++)
-        {
-            for(int b = 0; b < insertGridLoad[a].Count; b++)
-            {
-                this.transform.GetChild(a).GetChild(b).gameObject.SetActive(true);
-                this.transform.GetChild(a).GetChild(b).GetComponent<TextMeshProUGUI>().text = insertGridLoad[a][b];
-            }
-        }
     }
 }
