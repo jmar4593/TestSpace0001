@@ -1,6 +1,8 @@
+using ES3Types;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +13,6 @@ namespace Scroll
 
     public class Scroll01 : MonoBehaviour
     {
-
         /// <summary>
         /// Will iterate through the children of the signature object
         /// </summary>
@@ -32,7 +33,9 @@ namespace Scroll
 
 
         /// <summary>
-        /// This sits in cap methods
+        /// After setting textObjs to Preferred, this method returns a bool based on whether the size change has yet occurred.
+        /// Had to do this because size changes for ContentSizeFitter, seem to happen very last, even when scripting their
+        /// changes in front.
         /// </summary>
         /// <returns></returns>
         public bool ObjsPrefd(GameObject gamo)
@@ -41,7 +44,7 @@ namespace Scroll
 
             for (int a = 0; a < gamo.transform.childCount; a++)
             {
-                if ((gamo.transform.GetChild(a).GetComponent<TextMeshProUGUI>().text != "") && (gamo.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta == new Vector2 (0, 0)))
+                if ((gamo.transform.GetChild(a).GetComponent<TextMeshProUGUI>().text != "") && (gamo.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta == new Vector2(0, 0)))
                 {
                     prefd = false;
                 }
@@ -56,9 +59,15 @@ namespace Scroll
             colOrGrid.transform.parent.GetComponent<RectTransform>().offsetMax = new Vector2(-offsetOpt, 0);
         }
 
+        public void OffsetColBorder(GameObject roGriOpt, float offsetHt)
+        {
+            roGriOpt.transform.parent.GetComponent<RectTransform>().offsetMax = new Vector2(roGriOpt.transform.parent.GetComponent<RectTransform>().offsetMax.x, -offsetHt);
+        }
 
-
+        
     }
+
+
 }
 
 

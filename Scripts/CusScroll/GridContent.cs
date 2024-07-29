@@ -11,7 +11,7 @@ public class GridContent : Scroll01
     public bool Prefd()
     {
         bool prefd = true;
-        for(int a = 0; a < this.transform.childCount; a++)
+        for (int a = 0; a < this.transform.childCount; a++)
         {
             prefd = ObjsPrefd(this.transform.GetChild(a).gameObject);
         }
@@ -21,7 +21,7 @@ public class GridContent : Scroll01
 
     public void SetToPrefer()
     {
-        for(int a = 0; a < this.transform.childCount; a++)
+        for (int a = 0; a < this.transform.childCount; a++)
         {
             PreferDims(this.transform.GetChild(a).gameObject);
         }
@@ -31,7 +31,7 @@ public class GridContent : Scroll01
     public float CapGridX(int colX)
     {
         float longestWidthGridX = new float();
-        for(int a = 0; a < this.transform.childCount; a++)
+        for (int a = 0; a < this.transform.childCount; a++)
         {
             if (longestWidthGridX < this.transform.GetChild(a).GetChild(colX).GetComponent<RectTransform>().sizeDelta.x)
                 longestWidthGridX = this.transform.GetChild(a).GetChild(colX).GetComponent<RectTransform>().sizeDelta.x;
@@ -39,11 +39,22 @@ public class GridContent : Scroll01
         return longestWidthGridX;
     }
 
+    public float CapGridY(int rowY)
+    {
+        float tallestHeightGridY = new float();
+        for (int a = 0; a < this.transform.childCount; a++)
+        {
+            if (tallestHeightGridY < this.transform.GetChild(rowY).GetChild(a).GetComponent<RectTransform>().sizeDelta.y)
+                tallestHeightGridY = this.transform.GetChild(rowY).GetChild(a).GetComponent<RectTransform>().sizeDelta.y;
+        }
+        return tallestHeightGridY;
+    }
+
     public void AdjustX(List<float> optmzedWidths, float rowOffset, float optionsOffset)
     {
-        for(int a = 0; a < this.transform.childCount; a++)
+        for (int a = 0; a < this.transform.childCount; a++)
         {
-            for(int b = 0; b < this.transform.GetChild(a).childCount; b++)
+            for (int b = 0; b < this.transform.GetChild(a).childCount; b++)
             {
                 this.transform.GetChild(a).GetChild(b).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
                 this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(optmzedWidths[b], this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta.y);
@@ -52,5 +63,19 @@ public class GridContent : Scroll01
 
         OffsetRowOptionBorders(this.gameObject, rowOffset, optionsOffset);
 
+    }
+
+    public void AdjustY(List<float> optmzedHeights, float colOffset)
+    {
+        for (int a = 0; a < this.transform.childCount; a++)
+        {
+            for (int b = 0; b < this.transform.GetChild(a).childCount; b++)
+            {
+                this.transform.GetChild(a).GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+                this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta.x, optmzedHeights[a]);
+
+            }
+        }
+        OffsetColBorder(this.gameObject, colOffset);
     }
 }

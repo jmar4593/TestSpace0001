@@ -35,23 +35,40 @@ public class ColumnContent : Scroll01
 
     }
 
-    public void AdjustY(GameObject customScrollObject)
+    /// <summary>
+    /// This method is figuring out how tall the spaces inside ColumnContent, should be. Determined tallest height is then transposed
+    /// into one of the three standard sizes, based on 1/7th of the scroll object height. Plugs directly into ExecutePreferred of CustomScroll.
+    /// </summary>
+    /// <param name="customScrollObject"></param>
+    /// <returns></returns>
+    public float AdjustY(GameObject customScrollObject)
     {
-        float tallestHeight = 0;
+        float tallestHeight = 0; 
         for(int a = 0; a < this.transform.childCount; a++)
         {
             if(tallestHeight < this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y)
-            {
-                if (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y > 110)
+            { 
+                if (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y < 60)
                 {
-                    tallestHeight = customScrollObject.GetComponent<RectTransform>().rect.height * 0.3f;
+                    tallestHeight = customScrollObject.GetComponent<RectTransform>().rect.height * 0.071f;
                 }
-                if ((this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y > 70) && (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y < 110) )
+                if ((this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y > 60) && (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y < 100) )
                 {
-                    tallestHeight = 150;
+                    tallestHeight = customScrollObject.GetComponent<RectTransform>().rect.height * 0.107f;
+                }
+                else
+                {
+                    tallestHeight = customScrollObject.GetComponent<RectTransform>().rect.height * 0.142f;
                 }
             }
         }
+        for(int b = 0; b < this.transform.childCount; b++)
+        {
+            this.transform.GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta.x, tallestHeight);
+        }
+        this.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.parent.GetComponent<RectTransform>().sizeDelta.x, tallestHeight);
+        return tallestHeight;
     }
 
     public void SetToPrefer()

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
-public class CustomScroll : MonoBehaviour
+public class CustomScroll : Scroll02
 {
     [SerializeField]
     private Canvas canvas;
@@ -30,12 +30,13 @@ public class CustomScroll : MonoBehaviour
     {
         ExecutePreferred(AllObjsPrefd(), this.gameObject.GetComponent<RectTransform>().rect.height / 10);
 
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             SetToPrefer();
+
+            Debug.Log($"Give me 16th({this.GetComponent<RectTransform>().rect.height*0.0625f}) 8th ({this.GetComponent<RectTransform>().rect.height * 0.125f}) and 3-16th ({this.GetComponent<RectTransform>().rect.height * 0.1875f}) total of this object");
         }
 
-        Debug.Log(colContent.GetComponent<RectTransform>().rect.height / this.gameObject.GetComponent<RectTransform>().rect.height);
     }
 
     private void ExecutePreferred(bool allObjsPrefd, float tenPercentHeight)
@@ -43,17 +44,18 @@ public class CustomScroll : MonoBehaviour
         if(allObjsPrefd)
         {
             //prepare widths
-            float roOffset = roContent.AdjustX();
-            float colOffset = tenPercentHeight;
-            optContent.TurnOptions(optionsOn, colOffset);
-            colContent.AdjustX(OptimizedWidths(), roOffset, colOffset);
-            griContent.AdjustX(OptimizedWidths(), roOffset, colOffset);
-            
-            //prepare heights
+            float roOffsetX = roContent.AdjustX();
+            float colOffsetX = tenPercentHeight;
+            optContent.TurnOptions(optionsOn, colOffsetX);
+            colContent.AdjustX(OptimizedFloats(colContent.ReturnColumnX(), griContent.CapGridX), roOffsetX, colOffsetX);
+            griContent.AdjustX(OptimizedFloats(colContent.ReturnColumnX(), griContent.CapGridX), roOffsetX, colOffsetX);
 
+            //prepare heights
+            float colOffsetY = colContent.AdjustY(this.gameObject);
+            roContent.AdjustY(OptimizedFloats(roContent.ReturnRowY(), griContent.CapGridY), colOffsetY);
+            griContent.AdjustY(OptimizedFloats(roContent.ReturnRowY(), griContent.CapGridY),colOffsetY);
         }
     }
-
 
     /// <summary>
     /// Trigger this to set in motion correct autosizing of scroll Object.
@@ -71,28 +73,5 @@ public class CustomScroll : MonoBehaviour
         if(roContent.Prefd() && colContent.Prefd() && griContent.Prefd()) allObjPrefd = true;
         return allObjPrefd;
     }
-
-
-    private List<float> OptimizedWidths()
-    {
-        List<float> optFloats = colContent.ReturnColumnX();
-
-        for(int a = 0; a < optFloats.Count; a++)
-        {
-            if (optFloats[a] < griContent.CapGridX(a))
-            {
-                optFloats[a] = griContent.CapGridX(a);
-
-            }
-
-            if (optFloats[a] > 250) optFloats[a] = 250;
-
-        }
-
-        return optFloats;
-
-    }
-
-
-
+    
 }

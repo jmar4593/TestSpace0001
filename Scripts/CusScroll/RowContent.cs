@@ -67,4 +67,14 @@ public class RowContent : Scroll01
 
         return longestWidth;
     }
+
+    public void AdjustY(List<float> optmzdHeights, float colOffsetY)
+    {
+        for(int a = 0; a < this.transform.childCount; a++)
+        {
+            this.transform.GetChild(a).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.x, optmzdHeights[a]);
+        }
+        OffsetColBorder(this.gameObject, colOffsetY);
+    }
 }
