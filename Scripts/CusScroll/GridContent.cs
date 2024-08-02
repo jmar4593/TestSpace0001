@@ -57,15 +57,15 @@ public class GridContent : Scroll01
     /// </summary>
     /// <param name="rowY"></param>
     /// <returns></returns>
-    public float TallestGridY(int rowY)
+    public int ReturnOptLineCount(int rowY)
     {
-        float tallestHeightGridY = new float();
+        int optLineCount = 0;
         for (int a = 0; a < this.transform.childCount; a++)
         {
-            if (tallestHeightGridY < this.transform.GetChild(rowY).GetChild(a).GetComponent<RectTransform>().sizeDelta.y)
-                tallestHeightGridY = this.transform.GetChild(rowY).GetChild(a).GetComponent<RectTransform>().sizeDelta.y;
+            if (optLineCount < this.transform.GetChild(rowY).GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount)
+                optLineCount = this.transform.GetChild(rowY).GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount;
         }
-        return tallestHeightGridY;
+        return optLineCount;
     }
 
     /// <summary>

@@ -39,6 +39,13 @@ public class CustomScroll : Scroll02
     {
         if(allObjsPrefd)
         {
+            float[] lineLevel = new float[3];
+            lineLevel[0] = 0.071f * this.GetComponent<RectTransform>().rect.height;
+            lineLevel[1] = 0.107f * this.GetComponent<RectTransform>().rect.height;
+            lineLevel[2] = 0.142f * this.GetComponent<RectTransform>().rect.height;
+            Debug.Log($"this y rect is {this.GetComponent<RectTransform>().rect.height}");
+            Debug.Log($"line size 0: {lineLevel[0]}, line size 1: {lineLevel[1]}, line size 2: {lineLevel[2]}");
+
             //prepare widths
             float roOffsetX = roContent.AdjustX();
             float colOffsetX = tenPercentHeight;
@@ -46,11 +53,12 @@ public class CustomScroll : Scroll02
             List<float> bestColXs = OptimizedFloatsX(colContent.ReturnColumnX(), griContent.WidestGridX);
             colContent.AdjustX(bestColXs, roOffsetX, colOffsetX);
             griContent.AdjustX(bestColXs, roOffsetX, colOffsetX);
-            optContent.AdjustX(50);
+            //needs to take in the standard height - single line
+            optContent.AdjustX(lineLevel[0]);
 
             //prepare heights
-            float colOffsetY = colContent.AdjustY(this.gameObject);
-            List<float> bestRowYs = OptimizedFloatsY(roContent.ReturnRowY(), griContent.TallestGridY);
+            float colOffsetY = colContent.AdjustY(lineLevel);
+            List<float> bestRowYs = OptimizedFloatsY(lineLevel, roContent.ReturnLineCount(), griContent.ReturnOptLineCount);
             roContent.AdjustY(bestRowYs, colOffsetY);
             griContent.AdjustY(bestRowYs, colOffsetY);
             optContent.AdjustY(bestRowYs, colOffsetY);

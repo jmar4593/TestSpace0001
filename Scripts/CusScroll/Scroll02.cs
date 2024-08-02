@@ -1,3 +1,4 @@
+using GameKit.Utilities;
 using Scroll;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,9 @@ using UnityEngine;
 
 public class Scroll02 : MonoBehaviour
 {
-    public delegate float GetAdjacentGridValues(int gridLineValue);
+    public delegate float GetAdjacentGridValsX(int gridLineValue);
+
+    public delegate int GetAdjacentGridValsY(int gridLineValue);
 
     /// <summary>
     /// Takes the single dim floats of either the row or column object and compares them
@@ -17,7 +20,7 @@ public class Scroll02 : MonoBehaviour
     /// <param name="mainFloats"></param>
     /// <param name="largestAdjFloat"></param>
     /// <returns></returns>
-    public List<float> OptimizedFloatsX(List<float> mainFloats, GetAdjacentGridValues largestAdjFloat)
+    public List<float> OptimizedFloatsX(List<float> mainFloats, GetAdjacentGridValsX largestAdjFloat)
     {
         List<float> optFloats = mainFloats;
 
@@ -36,31 +39,29 @@ public class Scroll02 : MonoBehaviour
         return optFloats;
     }
 
-    public List<float> OptimizedFloatsY(List<float> mainFloats, GetAdjacentGridValues largestAdjFloat)
+    public List<float> OptimizedFloatsY(float[] lineLevels, List<int> lineCountMains, GetAdjacentGridValsY largestLineCountGridAdj)
     {
-        List<float> optFloats = mainFloats;
-
-        for (int a = 0; a < optFloats.Count; a++)
+        List<float> optSizes = new List<float>();
+        for (int a = 0; a < lineCountMains.Count; a++)
         {
-            float lgstAdjFlt = largestAdjFloat(a);
-            if (optFloats[a] < lgstAdjFlt)
+            int lgstAdjFlt = largestLineCountGridAdj(a);
+            if (lineCountMains[a] < lgstAdjFlt)
             {
-                optFloats[a] = lgstAdjFlt;
+                lineCountMains[a] = lgstAdjFlt;
 
             }
-            //cap has to happen here
-
+            //cap has to happen here, will return an actual measurement
+            optSizes.Add(lineLevels[lineCountMains[a]-1]);
         }
-        return optFloats;
+        return optSizes;
     }
 
-    public void CapY(GameObject customScrollObject, float capThisHeight)
+    public void CapY(GameObject childObject, float capThisHeight)
     {
-        float singleLine = 0.071f * customScrollObject.GetComponent<RectTransform>().sizeDelta.y;
-        float doubleLine = 0.107f * customScrollObject.GetComponent<RectTransform>().sizeDelta.y;
-        float tripleLine = 0.142f * customScrollObject.GetComponent<RectTransform>().sizeDelta.y;
+        float singleLine = 0.071f * childObject.GetComponent<RectTransform>().sizeDelta.y;
+        float doubleLine = 0.107f * childObject.GetComponent<RectTransform>().sizeDelta.y;
+        float tripleLine = 0.142f * childObject.GetComponent<RectTransform>().sizeDelta.y;
 
-        customScrollObject.GetComponent<TextMeshProUGUI>().maxVisibleLines = 3;
         for (int a = 0; a < this.transform.childCount; a++)
         {
 

@@ -21,12 +21,12 @@ public class RowContent : Scroll01
     /// Called from OptimizedFloats method, in the CustomScroll file.
     /// </summary>
     /// <returns></returns>
-    public List<float> ReturnRowY()
+    public List<int> ReturnLineCount()
     {
-        List<float> rowY = new List<float>();
+        List<int> rowY = new List<int>();
         for(int a = 0; a < this.transform.childCount; a++)
         {
-            rowY.Add(this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y);
+            rowY.Add(this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount);
         }
         return rowY;
     }

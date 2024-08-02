@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class ColumnContent : Scroll01
 {
+
+
     /// <summary>
     /// Returns true if ColumnContent children have resolved to their preferred sizes, via ContentSizeFitter.
     /// </summary>
@@ -54,35 +56,28 @@ public class ColumnContent : Scroll01
     /// </summary>
     /// <param name="customScrollObject"></param>
     /// <returns></returns>
-    public float AdjustY(GameObject customScrollObject)
+    public float AdjustY(float[] lineLevel)
     {
-        float tallestHeight = 0; 
+        int optLineLevel = 0; 
         for(int a = 0; a < this.transform.childCount; a++)
         {
-            if(tallestHeight < this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y)
-            { 
-                if (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y < 60)
-                {
-                    tallestHeight = customScrollObject.GetComponent<RectTransform>().sizeDelta.y * 0.071f;
-                }
-                if ((this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y > 60) && (this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y < 100) )
-                {
-                    tallestHeight = customScrollObject.GetComponent<RectTransform>().sizeDelta.y * 0.107f;
-                }
-                else
-                {
-                    tallestHeight = customScrollObject.GetComponent<RectTransform>().sizeDelta.y * 0.142f;
-                }
+            if(optLineLevel < this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount - 1)
+            {
+                optLineLevel = this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount - 1;
+                Debug.Log(optLineLevel);
             }
         }
+
+        float optDimY = lineLevel[optLineLevel];
+
         for(int b = 0; b < this.transform.childCount; b++)
         {
             this.transform.GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-            this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta.x, tallestHeight);
+            this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta.x, optDimY);
             this.transform.GetChild(b).GetComponent<TextMeshProUGUI>().overflowMode = TextOverflowModes.Ellipsis;
         }
-        this.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.parent.GetComponent<RectTransform>().sizeDelta.x, tallestHeight);
-        return tallestHeight;
+        this.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.parent.GetComponent<RectTransform>().sizeDelta.x, optDimY);
+        return optDimY;
     }
 
     /// <summary>
