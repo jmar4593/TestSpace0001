@@ -26,7 +26,10 @@ public class RowContent : Scroll01
         List<int> rowY = new List<int>();
         for(int a = 0; a < this.transform.childCount; a++)
         {
-            rowY.Add(this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount);
+
+            rowY.Add(this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount - 1);
+            Debug.Log($"Line count adds up to {rowY[a]}");
+
         }
         return rowY;
     }
@@ -76,7 +79,7 @@ public class RowContent : Scroll01
     {
         for(int a = 0; a < this.transform.childCount; a++)
         {
-            this.transform.GetChild(a).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            //this.transform.GetChild(a).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
             this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.x, optmzdHeights[a]);
             this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().overflowMode = TextOverflowModes.Ellipsis;
         }

@@ -51,33 +51,9 @@ public class Scroll02 : MonoBehaviour
 
             }
             //cap has to happen here, will return an actual measurement
-            optSizes.Add(lineLevels[lineCountMains[a]-1]);
+            optSizes.Add(lineLevels[lineCountMains[a]]);
         }
         return optSizes;
     }
 
-    public void CapY(GameObject childObject, float capThisHeight)
-    {
-        float singleLine = 0.071f * childObject.GetComponent<RectTransform>().sizeDelta.y;
-        float doubleLine = 0.107f * childObject.GetComponent<RectTransform>().sizeDelta.y;
-        float tripleLine = 0.142f * childObject.GetComponent<RectTransform>().sizeDelta.y;
-
-        for (int a = 0; a < this.transform.childCount; a++)
-        {
-
-            if (this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount == 1)
-            {
-                capThisHeight = singleLine;
-            }
-            if (this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount == 2)
-            {
-                capThisHeight = doubleLine;
-            }
-            if (this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount > 2)
-            {
-                capThisHeight = tripleLine;
-            }
-
-        }
-    }
 }

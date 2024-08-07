@@ -28,14 +28,14 @@ public class CustomScroll : Scroll02
     private void Update()
     {
         //This method stays in preferred, but does not execute until I set a bool to do it.
-        ExecutePreferred(AllObjsPrefd(), 50);
+        ExecutePreferred(AllObjsPrefd());
         if (Input.GetKeyDown(KeyCode.V))
         {
             SetToPrefer();
         }
     }
 
-    private void ExecutePreferred(bool allObjsPrefd, float tenPercentHeight)
+    private void ExecutePreferred(bool allObjsPrefd)
     {
         if(allObjsPrefd)
         {
@@ -48,11 +48,10 @@ public class CustomScroll : Scroll02
 
             //prepare widths
             float roOffsetX = roContent.AdjustX();
-            float colOffsetX = tenPercentHeight;
-            optContent.TurnOptions(optionsOn, colOffsetX);
+            optContent.TurnOptions(optionsOn, lineLevel[0]);
             List<float> bestColXs = OptimizedFloatsX(colContent.ReturnColumnX(), griContent.WidestGridX);
-            colContent.AdjustX(bestColXs, roOffsetX, colOffsetX);
-            griContent.AdjustX(bestColXs, roOffsetX, colOffsetX);
+            colContent.AdjustX(bestColXs, roOffsetX, lineLevel[0]);
+            griContent.AdjustX(bestColXs, roOffsetX, lineLevel[0]);
             //needs to take in the standard height - single line
             optContent.AdjustX(lineLevel[0]);
 

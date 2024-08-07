@@ -72,7 +72,7 @@ public class ColumnContent : Scroll01
 
         for(int b = 0; b < this.transform.childCount; b++)
         {
-            this.transform.GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            //this.transform.GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
             this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta.x, optDimY);
             this.transform.GetChild(b).GetComponent<TextMeshProUGUI>().overflowMode = TextOverflowModes.Ellipsis;
         }

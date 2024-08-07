@@ -65,7 +65,8 @@ public class GridContent : Scroll01
             if (optLineCount < this.transform.GetChild(rowY).GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount)
                 optLineCount = this.transform.GetChild(rowY).GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount;
         }
-        return optLineCount;
+        Debug.Log($"opt line count of grid reads as {optLineCount - 1}");
+        return optLineCount - 1;
     }
 
     /// <summary>
@@ -100,7 +101,7 @@ public class GridContent : Scroll01
         {
             for (int b = 0; b < this.transform.GetChild(a).childCount; b++)
             {
-                this.transform.GetChild(a).GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+                //this.transform.GetChild(a).GetChild(b).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.Unconstrained;
                 this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(this.transform.GetChild(a).GetChild(b).GetComponent<RectTransform>().sizeDelta.x, optmzedHeights[a]);
                 this.transform.GetChild(a).GetChild(b).GetComponent<TextMeshProUGUI>().overflowMode = TextOverflowModes.Ellipsis;
             }
