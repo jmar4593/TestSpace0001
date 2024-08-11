@@ -28,14 +28,14 @@ public class CustomScroll : Scroll02
     private void Update()
     {
         //This method stays in preferred, but does not execute until I set a bool to do it.
-        ExecutePreferred(AllObjsPrefd());
+        AdjustBorders(AllObjsPrefd(),AllLineCountNonzero());
         if (Input.GetKeyDown(KeyCode.V))
         {
             SetToPrefer();
         }
     }
 
-    private void ExecutePreferred(bool allObjsPrefd)
+    private void AdjustBorders(bool allObjsPrefd, bool allLineCountNonzero)
     {
         if(allObjsPrefd)
         {
@@ -43,19 +43,31 @@ public class CustomScroll : Scroll02
             lineLevel[0] = 0.071f * this.GetComponent<RectTransform>().rect.height;
             lineLevel[1] = 0.107f * this.GetComponent<RectTransform>().rect.height;
             lineLevel[2] = 0.142f * this.GetComponent<RectTransform>().rect.height;
-            Debug.Log($"this y rect is {this.GetComponent<RectTransform>().rect.height}");
-            Debug.Log($"line size 0: {lineLevel[0]}, line size 1: {lineLevel[1]}, line size 2: {lineLevel[2]}");
 
-            //prepare widths
+            AdjustX(allObjsPrefd, lineLevel[0]);
+
+            AdjustY(allLineCountNonzero, lineLevel);
+        }
+    }
+
+    private void AdjustX(bool allObjsPrefd, float standardHeight)
+    {
+        if(allObjsPrefd)
+        {
             float roOffsetX = roContent.AdjustX();
-            optContent.TurnOptions(optionsOn, lineLevel[0]);
+            optContent.TurnOptions(optionsOn, standardHeight);
             List<float> bestColXs = OptimizedFloatsX(colContent.ReturnColumnX(), griContent.WidestGridX);
-            colContent.AdjustX(bestColXs, roOffsetX, lineLevel[0]);
-            griContent.AdjustX(bestColXs, roOffsetX, lineLevel[0]);
+            colContent.AdjustX(bestColXs, roOffsetX, standardHeight);
+            griContent.AdjustX(bestColXs, roOffsetX, standardHeight);
             //needs to take in the standard height - single line
-            optContent.AdjustX(lineLevel[0]);
+            optContent.AdjustX(standardHeight);
+        }
+    }
 
-            //prepare heights
+    private void AdjustY(bool allLineCountNonzero, float[] lineLevel)
+    {
+        if(allLineCountNonzero)
+        {
             float colOffsetY = colContent.AdjustY(lineLevel);
             List<float> bestRowYs = OptimizedFloatsY(lineLevel, roContent.ReturnLineCount(), griContent.ReturnOptLineCount);
             roContent.AdjustY(bestRowYs, colOffsetY);
@@ -84,5 +96,13 @@ public class CustomScroll : Scroll02
             if (roContent.Prefd() && colContent.Prefd() && griContent.Prefd()) allObjPrefd = true;
         }
         return allObjPrefd;
+    }
+
+    private bool AllLineCountNonzero()
+    {
+        bool lineCountNonzero = false;
+        if (roContent.LineCountNonzero() && colContent.LineCountNonzero() && griContent.LineCountNonzero()) lineCountNonzero = true;
+        return lineCountNonzero;
+
     }
 }

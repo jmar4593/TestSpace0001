@@ -20,6 +20,16 @@ public class ColumnContent : Scroll01
     }
 
     /// <summary>
+    /// Return false if lineCounts filled with text are returning zero;
+    /// </summary>
+    /// <returns></returns>
+    public bool LineCountNonzero()
+    {
+        return LineCountNonZero(this.gameObject);
+    }
+
+
+    /// <summary>
     /// Called from OptmzdFloats method. Returns a list of floats to be compared against adjacent column X values for finding the best fit width.
     /// </summary>
     /// <returns></returns>

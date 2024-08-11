@@ -47,6 +47,21 @@ namespace Scroll
         }
 
         /// <summary>
+        /// After filling the object with text, the autosize has to make sure that the line count updates to a nonzero. Used in obj groupings, and called from CustomScroll during AdjustY;
+        /// </summary>
+        /// <param name="gamo"></param>
+        /// <returns></returns>
+        public bool LineCountNonZero(GameObject gamo)
+        {
+            bool nonZero = true;
+            for(int a = 0; a < gamo.transform.childCount; a++)
+            {
+                if ((gamo.transform.GetChild(a).GetComponent<TextMeshProUGUI>().text != "") && (gamo.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount == 0)) nonZero = false;
+            }
+            return nonZero;
+        }
+
+        /// <summary>
         /// Takes the viewport of the column or grid, and applies the signature offsets from the row and options object.
         /// Called from ColumnContent and OptionsContent.
         /// </summary>

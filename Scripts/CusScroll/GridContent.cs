@@ -23,6 +23,20 @@ public class GridContent : Scroll01
     }
 
     /// <summary>
+    /// Return false if lineCounts filled with text are returning zero;
+    /// </summary>
+    /// <returns></returns>
+    public bool LineCountNonzero()
+    {
+        bool nonZero = true;
+        for(int a = 0; a < this.transform.childCount; a++)
+        {
+            nonZero = LineCountNonZero(this.transform.GetChild(a).gameObject);
+        }
+        return nonZero;
+    }
+
+    /// <summary>
     /// Set Grid object children dims to preferred, via ContentSizeFitter
     /// </summary>
     public void SetToPrefer()

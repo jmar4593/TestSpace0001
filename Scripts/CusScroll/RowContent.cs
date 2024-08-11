@@ -35,6 +35,15 @@ public class RowContent : Scroll01
     }
 
     /// <summary>
+    /// Return false if lineCounts filled with text are returning zero;
+    /// </summary>
+    /// <returns></returns>
+    public bool LineCountNonzero()
+    {
+        return LineCountNonZero(this.gameObject);
+    }
+
+    /// <summary>
     /// Set Row object children dims to preferred, via ContentSizeFitter
     /// </summary>
     public void SetToPrefer()
