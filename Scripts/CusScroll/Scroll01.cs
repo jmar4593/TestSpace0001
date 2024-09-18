@@ -1,8 +1,4 @@
-using ES3Types;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,20 +8,21 @@ namespace Scroll
     public class Scroll01 : MonoBehaviour
     {
         /// <summary>
-        /// Will iterate through the children of the signature object, and zero out the dim of the children. Will also
-        /// prepare the children by setting their font to overflow, and their contentSizeFitters to preferredSize. 
-        /// Following methods must confirm when the preferred has actually occured, before executing. Is called
+        /// Will iterate through the children of the signature object, and disable the layout element of the children. This will allow the
+        /// width of the children to stretch as far as they need horizontally, so they can be compared for bestFit/widthCapped. 
+        /// Following methods must confirm when the preferred has actually occured (by counting a line Count of 1), before executing. Is called
         /// from Row, Column, and Grid content files.
         /// </summary>
         /// <param name="gameOb"></param>
-        public void PreferDims(GameObject gameOb)
+        public void GetDefaultPrefer(GameObject gameOb)
         {
             for (int a = 0; a < gameOb.transform.childCount; a++)
             {
-                gameOb.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+                //gameOb.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
                 gameOb.transform.GetChild(a).GetComponent<TextMeshProUGUI>().overflowMode = TextOverflowModes.Overflow;
-                gameOb.transform.GetChild(a).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                gameOb.transform.GetChild(a).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                //gameOb.transform.GetChild(a).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                //gameOb.transform.GetChild(a).GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                gameOb.transform.GetChild(a).GetComponent<LayoutElement>().enabled = false;
             }
         }
 

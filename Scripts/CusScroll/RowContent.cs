@@ -28,7 +28,7 @@ public class RowContent : Scroll01
         {
 
             rowY.Add(this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount - 1);
-            Debug.Log($"Line count adds up to {rowY[a]}");
+            Debug.Log($"Line count adds up to {this.transform.GetChild(a).GetComponent<TextMeshProUGUI>().textInfo.lineCount}");
 
         }
         return rowY;
@@ -46,9 +46,9 @@ public class RowContent : Scroll01
     /// <summary>
     /// Set Row object children dims to preferred, via ContentSizeFitter
     /// </summary>
-    public void SetToPrefer()
+    public void GetDefaultPrefer()
     {
-        PreferDims(this.gameObject);
+        GetDefaultPrefer(this.gameObject);
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class RowContent : Scroll01
         }
         for(int b = 0; b < this.transform.childCount; b++)
         {
-            this.transform.GetChild(b).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            //this.transform.GetChild(b).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta = new Vector2(longestWidth, this.transform.GetChild(b).GetComponent<RectTransform>().sizeDelta.y);
         }
         this.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(longestWidth, this.transform.parent.GetComponent<RectTransform>().sizeDelta.y);

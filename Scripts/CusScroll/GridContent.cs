@@ -39,11 +39,11 @@ public class GridContent : Scroll01
     /// <summary>
     /// Set Grid object children dims to preferred, via ContentSizeFitter
     /// </summary>
-    public void SetToPrefer()
+    public void GetDefualtPrefer()
     {
         for (int a = 0; a < this.transform.childCount; a++)
         {
-            PreferDims(this.transform.GetChild(a).gameObject);
+            GetDefaultPrefer(this.transform.GetChild(a).gameObject);
         }
 
     }

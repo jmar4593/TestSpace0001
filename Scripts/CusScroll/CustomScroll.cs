@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public class CustomScroll : Scroll02
@@ -24,6 +26,12 @@ public class CustomScroll : Scroll02
 
     private bool autosizeScroll;
 
+    public event Action thisThing;
+
+    private void Happening()
+    {
+
+    }
 
     private void Update()
     {
@@ -31,7 +39,7 @@ public class CustomScroll : Scroll02
         AdjustBorders(AllObjsPrefd(),AllLineCountNonzero());
         if (Input.GetKeyDown(KeyCode.V))
         {
-            SetToPrefer();
+            GetDefaultPrefer();
         }
     }
 
@@ -43,11 +51,17 @@ public class CustomScroll : Scroll02
             lineLevel[0] = 0.071f * this.GetComponent<RectTransform>().rect.height;
             lineLevel[1] = 0.107f * this.GetComponent<RectTransform>().rect.height;
             lineLevel[2] = 0.142f * this.GetComponent<RectTransform>().rect.height;
-
+            Action<float> action = new Action<float>(Dlog);
+            Array.ForEach(lineLevel,Dlog);
             AdjustX(allObjsPrefd, lineLevel[0]);
 
             AdjustY(allLineCountNonzero, lineLevel);
         }
+    }
+
+    private void Dlog(float lineLevel)
+    {
+        Debug.Log(lineLevel);
     }
 
     private void AdjustX(bool allObjsPrefd, float standardHeight)
@@ -80,11 +94,11 @@ public class CustomScroll : Scroll02
     /// <summary>
     /// Trigger this to set in motion correct autosizing of scroll Object.
     /// </summary>
-    private void SetToPrefer()
+    private void GetDefaultPrefer()
     {
-        roContent.SetToPrefer();
-        colContent.SetToPrefer();
-        griContent.SetToPrefer();
+        roContent.GetDefaultPrefer();
+        colContent.GetDefualtPrefer();
+        griContent.GetDefualtPrefer();
         autosizeScroll = true;
     }
 
@@ -102,6 +116,7 @@ public class CustomScroll : Scroll02
     {
         bool lineCountNonzero = false;
         if (roContent.LineCountNonzero() && colContent.LineCountNonzero() && griContent.LineCountNonzero()) lineCountNonzero = true;
+
         return lineCountNonzero;
 
     }

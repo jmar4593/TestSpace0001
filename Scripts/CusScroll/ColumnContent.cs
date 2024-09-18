@@ -2,6 +2,7 @@ using Scroll;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -27,6 +28,8 @@ public class ColumnContent : Scroll01
     {
         return LineCountNonZero(this.gameObject);
     }
+
+    
 
 
     /// <summary>
@@ -54,7 +57,7 @@ public class ColumnContent : Scroll01
     {
         for(int a = 0; a < this.transform.childCount; a++)
         {
-            this.transform.GetChild(a).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            //this.transform.GetChild(a).GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta = new Vector2(optmzdWidths[a], this.transform.GetChild(a).GetComponent<RectTransform>().sizeDelta.y);
         }
         OffsetRowOptionBorders(this.gameObject, rowOffset, optionsOffset);
@@ -93,8 +96,8 @@ public class ColumnContent : Scroll01
     /// <summary>
     /// Set Column object children dims to preferred, via ContentSizeFitter
     /// </summary>
-    public void SetToPrefer()
+    public void GetDefualtPrefer()
     {
-        PreferDims(this.gameObject);
+        GetDefaultPrefer(this.gameObject);
     }
 }
